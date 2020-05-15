@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Leslie人口模型是一个基于不同年龄组的生育率和存活率来估测一个种群个体数量和年龄结构的发展趋势的代数模型。 模型假设 Leslie人口模型有如下的基本假设：  人口性别比是固定的。Leslie人口模型使用生育率来研究人口变化，因此是针对雌性个体而言的。 一个种群按年龄被等分为m个年龄组，每个年龄组内的生育率和存活率是相同的。 生育率大于0的年龄组有至少一个，并且是连续分布的。 存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leslie 人口模型">
+<meta property="og:url" content="http://yoursite.com/2020/05/15/Leslie-%E4%BA%BA%E5%8F%A3%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="xixi&#39;s blog">
+<meta property="og:description" content="Leslie人口模型是一个基于不同年龄组的生育率和存活率来估测一个种群个体数量和年龄结构的发展趋势的代数模型。 模型假设 Leslie人口模型有如下的基本假设：  人口性别比是固定的。Leslie人口模型使用生育率来研究人口变化，因此是针对雌性个体而言的。 一个种群按年龄被等分为m个年龄组，每个年龄组内的生育率和存活率是相同的。 生育率大于0的年龄组有至少一个，并且是连续分布的。 存">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-15T08:27:48.000Z">
+<meta property="article:modified_time" content="2020-05-15T15:13:01.010Z">
+<meta property="article:author" content="xixi">
+<meta property="article:tag" content="数学模型">
+<meta property="article:tag" content="代数模型">
+<meta property="article:tag" content="人口模型">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/05/15/Leslie-%E4%BA%BA%E5%8F%A3%E6%A8%A1%E5%9E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Leslie 人口模型 | xixi's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">xixi's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/15/Leslie-%E4%BA%BA%E5%8F%A3%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xixi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xixi's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Leslie 人口模型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-15 16:27:48 / 修改时间：23:13:01" itemprop="dateCreated datePublished" datetime="2020-05-15T16:27:48+08:00">2020-05-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/" itemprop="url" rel="index"><span itemprop="name">数学建模</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E4%BB%A3%E6%95%B0%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">代数模型</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Leslie人口模型是一个基于不同年龄组的<strong>生育率</strong>和<strong>存活率</strong>来估测一个种群<strong>个体数量</strong>和<strong>年龄结构</strong>的发展趋势的代数模型。</p>
+<h2 id="模型假设">模型假设</h2>
+<p>Leslie人口模型有如下的基本假设：</p>
+<ul>
+<li>人口性别比是固定的。Leslie人口模型使用生育率来研究人口变化，因此是针对雌性个体而言的。</li>
+<li>一个种群按年龄被等分为m个年龄组，每个年龄组内的生育率和存活率是相同的。</li>
+<li>生育率大于0的年龄组有至少一个，并且是连续分布的。</li>
+<li>存活率均大于0。</li>
+<li>时间变化的基本单位为年龄组跨度。</li>
+</ul>
+<a id="more"></a>
+<h2 id="leslie矩阵">Leslie矩阵</h2>
+<p>Leslie人口模型将一个种群按年龄大小等分为m个年龄组，以每个年龄组作为基本单位来描述、研究种群的人口变化。相应地，时间的基本单位和年龄组的跨度是一致的。例如，如果将人类以5岁作为每个年龄组的跨度（分为0-5岁，5-10岁等等），那么在研究人类人口随时间的变化趋势时，也应以5年作为基本单位来研究。</p>
+<p>我们记第 i 个年龄组的生育率（即每个个体在一个时间单位内生育的个体数）为<span class="math inline">\(b_i\)</span>，存活率（即这个年龄组在一个时间单位后的存活率）为<span class="math inline">\(s_i\)</span>。然后用一个向量来描述人口的数量与年龄结构： <span class="math display">\[
+N(t)=(a_1^{(t)},a_2^{(t)},\cdots,a_m^{(t)})^\mathrm{T},\quad t = 0,1,2,\cdots
+\]</span> 其中 t 为时间，<span class="math inline">\(a_i^{(t)}\)</span>为 t 时间时第 i 个年龄组的人口数量。</p>
+<p>有了这个向量以后，我们观察一下<span class="math inline">\(N(t)\)</span>与<span class="math inline">\(N(t+1)\)</span>之间的关系。首先，除了第一个年龄组（新生儿）以外，t+1 时刻的每个年龄组都是 t 时刻前一个年龄组的存活个体。即： <span class="math display">\[
+a_i^{(t+1)} = a_i^{(t)}s_i,\quad i\ge2
+\]</span> 其次，t+1 时刻的新生儿数量，应该是 t 时刻每个年龄组生育的个体数之和。即： <span class="math display">\[
+a_1^{(t+1)}=\sum_{i=1}^m a_i^{(t)}b_i
+\]</span> 以上两个式子可以写成矩阵形式： <span class="math display">\[
+N(t+1) = LN(t),\quad 
+L=
+\left[
+\begin{matrix}
+b_1 &amp; b_2 &amp; b_3 &amp; \cdots &amp; b_{m-1} &amp; b_m \\
+s_1 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\
+0 &amp; s_2 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots\\
+0 &amp; 0 &amp; 0 &amp; \cdots &amp; s_{m-1} &amp; 0
+\end{matrix}
+\right]
+\]</span> 其中矩阵 L 被称作<strong>Leslie矩阵</strong>。</p>
+<h2 id="leslie矩阵的相关定理">Leslie矩阵的相关定理</h2>
+<p>接下来来看一些与Leslie模型有关的定理。</p>
+<p>（如果对数学理论基础不感兴趣，可以跳到<a href="#重要的结论">这里</a>）</p>
+<h3 id="理论基础">理论基础</h3>
+<blockquote>
+<p>定理1：<strong>Perron-Frobenius 定理</strong></p>
+<p>对于非负不可约矩阵 A ，有如下结论：</p>
+<ol type="1">
+<li>A 的谱半径（特征值的最大模）r 是 A 的一个正的单重主特征值，且对应于一个正特征向量；</li>
+<li>若 A 有 h 个模为 r 的主特征值<span class="math inline">\(\lambda\)</span>，则它们互不相同，且有 <span class="math inline">\(\lambda^h=r^h\)</span>。</li>
+</ol>
+</blockquote>
+<p>这里涉及到“非负不可约矩阵”的定义。非负指的是矩阵中的每一个元素都是非负的，那么很明显 Leslie 矩阵必定是非负的。不可约矩阵的定义比较复杂，但它有一个比较直观的等价定义，就是将矩阵看作一个邻接矩阵后所生成的图的是强连通的。而强连通的定义是，任意两点之间都相互连通。比如我们看下面这个矩阵： <span class="math display">\[
+L=
+\left[
+\begin{matrix}
+0 &amp; 0.5 &amp; 0.4 \\
+0.5 &amp; 0 &amp; 0 \\
+0 &amp; 0.3 &amp; 0
+\end{matrix}
+\right]
+\]</span></p>
+<p>如果第 i 行第 j 列的元素是非零元素，那么我们从 i 到 j 画一个箭头。于是，从这个矩阵我们可以生成这样一个图(Graph):</p>
+<pre class="mermaid" style="text-align: center;">
+            graph LR
+            A[1]-->B[2]
+A-->C[3]
+B-->A
+C-->B
+          </pre>
+<p>于是我们就可以很直观的看到，任意两点之间，在来回两个方向都存在一条连通的路。这样的矩阵就是不可约的矩阵。容易证明，在 Leslie 矩阵中，如果存活率都大于0，且最后一个年龄组的生育率大于0，这样的 Leslie 矩阵必定是非负不可约的。如果存在第 i 个年龄组，从它开始后面的年龄组生育率均为0，我们也可以把矩阵进行分块： <span class="math display">\[
+L=
+\left[
+\begin{matrix}
+L_1 &amp; M \\
+N &amp; P \\
+\end{matrix}
+\right]
+\]</span> 使得 <span class="math inline">\(L_1\)</span> 满足上面的条件。此时也可以证明，L 的特征值和特征向量可以由 <span class="math inline">\(L_1\)</span> 来确定，这样我们只需要研究形如<span class="math inline">\(L_1\)</span> 这样的矩阵就可以了。</p>
+<h3 id="重要的结论">重要的结论</h3>
+<p>接下来这个定理求出了 Leslie 矩阵的特征向量：</p>
+<blockquote>
+<p>定理2：Leslie 矩阵有唯一的正特征值<span class="math inline">\(\lambda_0\)</span>，且此特征值是单重的。它所对应的首一特征向量为 <span class="math display">\[
+n^*=\left[1,\frac{s_1}{\lambda_0},\frac{s_1s_2}{\lambda_0^2},\cdots,\frac{s_1s_2\cdots s_{m-1}}{\lambda_0^{m-1}}\right]^\mathrm{T}
+\]</span></p>
+</blockquote>
+<p>然后是一个重要结论：</p>
+<blockquote>
+<p>定理3：如果Leslie矩阵的主特征值是唯一的，那么有：</p>
+<ol type="1">
+<li><span class="math inline">\(N(t)\to C\lambda_0^tn^*,t\to \infty\)</span></li>
+<li>当 t 足够大时，<span class="math inline">\(N(t+1)\approx\lambda_0N(t)\)</span></li>
+</ol>
+</blockquote>
+<p>从这个定理可以得出 Leslie 人口模型中<strong>最为重要的两个结论</strong>。当主特征值唯一，有</p>
+<ol type="1">
+<li>当 t 足够大的时候，N(t) 会逐渐与 <span class="math inline">\(n^*\)</span>平行。也就是说，这个种群的年龄结构会趋于稳定，各年龄组的人口数量比例与 <span class="math inline">\(n^*\)</span>是相同的。</li>
+<li><span class="math inline">\(\lambda_0\)</span> 体现了这个种群总人口数量的变化情况。当 <span class="math inline">\(\lambda_0&gt;1\)</span> 时，人口数量不断增加；当 <span class="math inline">\(\lambda_0&lt;1\)</span> 时，人口数量不断减少；当 <span class="math inline">\(\lambda_0=1\)</span> 时，人口数量趋于稳定。</li>
+</ol>
+<p>而如果 Leslie 矩阵的主特征值个数大于1，假设有 k 个，那么年龄结构将会出现 h 周期现象，其中 h 为 k 的因子。</p>
+<h3 id="从另一个角度看数量变化">从另一个角度看数量变化</h3>
+<p>对于种群的增长率，我们可以换一个角度来考察。现在考虑一个指标——“每个雌性个体在一生中生育的个体数量”，把它记为 <span class="math inline">\(\beta\)</span> . 这个指标实际上是容易计算的，我们有 <span class="math display">\[
+\beta=b_1+\sum_{i=2}^m{b_is_1\cdots s_{i-1}}
+\]</span> 其实就是将每个年龄组的生育率与个体存活到这个年龄组的存活率相乘，然后相加得到 <span class="math inline">\(\beta\)</span> 。</p>
+<p>从直观上看，如果每个雌性个体生育的个数小于1，那么整个种群的数量必定是缓慢下降的；如果大于1，数量必定上升；如果等于1，那么数量会维持在稳定的水平。于是，除了求矩阵的主特征值外，我们就得到了第二种判定种群数量变化的方法，而且这种方法在计算上更为简单。</p>
+<h2 id="案例">案例</h2>
+<p>某种群的按年演变的年龄结构矩阵为 <span class="math display">\[
+P=
+\left[
+\begin{matrix}
+0 &amp; 1.0 &amp; 1.8 \\
+0.7 &amp; 0 &amp; 0 \\
+0 &amp; 0.4 &amp; 0 \\
+\end{matrix}
+\right]
+\]</span></p>
+<ol type="1">
+<li>估计矩阵 P 的模最大特征值。</li>
+<li>估计种群稳定的年龄结构和发展趋势。</li>
+<li>如果环境最大容量为39600，要保持种群总数不变，应怎样选择种群的初始数据及怎样控制出生率？（假设对所有的年龄段按同一比例采取控制措施）</li>
+<li>经控制后，种群稳定的年龄结构是怎样的？</li>
+</ol>
+<p>对于前两问，利用MATLAB里的 eig 函数可以轻松地求出矩阵 P 的所有特征值及其对应的特征向量。因此，我们可以直接计算出 P 有唯一的主特征值 1.0801，其对应的首一特征向量为 <span class="math inline">\([1,0.6481,0.24]^\mathrm{T}\)</span>. 因此，此种群的发展趋势为缓慢增长，稳定的年龄结构为 1:0.6481:0.24 .</p>
+<p>对于第三、四问，设所有年龄段的生育率都乘上一个比例 k (k&lt;1)，得到一个新的 Leslie 矩阵： <span class="math display">\[
+P_1=
+\left[
+\begin{matrix}
+0 &amp; 1.0k &amp; 1.8k \\
+0.7 &amp; 0 &amp; 0 \\
+0 &amp; 0.4 &amp; 0 \\
+\end{matrix}
+\right]
+\]</span> 为了简便，我们使用之前提到的 <span class="math inline">\(\beta\)</span> 来求出 k 。要使种群数量保持稳定，必定要使 <span class="math display">\[
+\beta=1.0k\times0.7+1.8k\times0.7\times0.4=1
+\]</span> 解得 <span class="math inline">\(k=0.8306\)</span> .</p>
+<p>此时求 <span class="math inline">\(P_1\)</span> 的特征值与特征向量，得到首一特征向量为<span class="math inline">\([1,0.7,0.28]^\mathrm{T}\)</span></p>
+<p>对于初始数据的设定，如果要使种群数量从一开始就保持稳定，那么我们可以把初始时的年龄结构就设置为稳定时的年龄结构。因为环境容纳量为39600，我们不妨就将初始时种群的总数量设为39600。这样计算出来的初始数据为 <span class="math display">\[
+N(0) = [20000,14000,5600]^\mathrm{T}
+\]</span></p>
+<h2 id="其他推广">其他推广</h2>
+<p>Leslie 人口模型可与优化问题进行结合，进行一些推广。例如农场的屠宰问题，如何在保持牲口数量稳定的前提下使屠宰的数量达到最大化？这里就可以对 Leslie 矩阵中的存活率与生育率做一些修改，使得新的 Leslie 矩阵满足相应的要求。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Beresford Parlett. Ergodic Properties of Populations Ⅰ: The One Sex Model. <em>Theoretical Population Biology 1</em>.1970: 191-207.</li>
+<li>数学建模与数学实验. http://www.icourses.cn/sCourse/course_3256.html.</li>
+</ol>
+<h2 id="附录">附录</h2>
+<p>有用的 matlab 代码（其实非常简单）：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">leslie</span><span class="params">(A)</span></span></span><br><span class="line"><span class="comment">%leslie人口模型</span></span><br><span class="line"><span class="comment">%A为leslie矩阵，此函数计算其谱半径、主特征值数量及稳定时的年龄结构</span></span><br><span class="line">[V,D] = eig(A);</span><br><span class="line">[d,ind] = <span class="built_in">sort</span>(<span class="built_in">diag</span>(D));</span><br><span class="line">r = <span class="built_in">abs</span>(d(<span class="keyword">end</span>));</span><br><span class="line">fprintf(<span class="string">"谱半径：%f\n"</span>,r);</span><br><span class="line">n = sum(<span class="built_in">abs</span>(d)==r);</span><br><span class="line">fprintf(<span class="string">"主特征值个数：%d\n"</span>,n);</span><br><span class="line"><span class="keyword">if</span> n==<span class="number">1</span></span><br><span class="line">    fprintf(<span class="string">"首一特征向量为：\n"</span>);</span><br><span class="line">    vec = V(:,ind(<span class="keyword">end</span>));</span><br><span class="line">    vec = vec*(<span class="number">1</span>/vec(<span class="number">1</span>))</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6%E6%A8%A1%E5%9E%8B/" rel="tag"># 数学模型</a>
+              <a href="/tags/%E4%BB%A3%E6%95%B0%E6%A8%A1%E5%9E%8B/" rel="tag"># 代数模型</a>
+              <a href="/tags/%E4%BA%BA%E5%8F%A3%E6%A8%A1%E5%9E%8B/" rel="tag"># 人口模型</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/15/Hello-Hexo/" rel="prev" title="Hello Hexo">
+      <i class="fa fa-chevron-left"></i> Hello Hexo
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型假设"><span class="nav-number">1.</span> <span class="nav-text">模型假设</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#leslie矩阵"><span class="nav-number">2.</span> <span class="nav-text">Leslie矩阵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#leslie矩阵的相关定理"><span class="nav-number">3.</span> <span class="nav-text">Leslie矩阵的相关定理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#理论基础"><span class="nav-number">3.1.</span> <span class="nav-text">理论基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重要的结论"><span class="nav-number">3.2.</span> <span class="nav-text">重要的结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从另一个角度看数量变化"><span class="nav-number">3.3.</span> <span class="nav-text">从另一个角度看数量变化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例"><span class="nav-number">4.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他推广"><span class="nav-number">5.</span> <span class="nav-text">其他推广</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">6.</span> <span class="nav-text">参考文献</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录"><span class="nav-number">7.</span> <span class="nav-text">附录</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xixi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xixi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
